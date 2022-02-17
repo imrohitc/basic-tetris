@@ -60,8 +60,31 @@ document.addEventListener('DOMContentLoaded', () => {
     //Undraw the Tetromino
     function undraw() {
         current.forEach(index => {
-            squares[currentPosition + index].classList.remove("Tetromino");
+            squares[currentPosition + index].classList.remove("tetromino");
         });
     }
-    
+
+    //Make the tetromino move down every second
+    timeID = setInterval(moveDown, 1000);
+
+    //Move down function
+    function moveDown() {
+        undraw();
+        currentPosition += width;
+        draw();
+        freeze();
+    }
+
+    //Freeze function
+    function freeze() {
+        if(current.some(index => squares[currentPosition + index + width].classList.contains("taken"))) {
+            current.forEach(index => squares[currentPosition + index].classList.add("taken"));
+
+            //Start a new Tetromino falling
+            random = Math.floor(Math.random() * theTetrominoes.length);
+            current = theTetrominoes[random][currentRotation];
+            currentPosition = 4;
+            draw();
+        }
+    }
 })
